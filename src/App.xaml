@@ -1,0 +1,25 @@
+﻿<Application x:Class="SimpleDICOMToolkit.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:s="https://github.com/canton7/Stylet"
+             xmlns:app="clr-namespace:SimpleDICOMToolkit">
+    
+    <Application.Resources>
+        <s:ApplicationLoader>
+            <s:ApplicationLoader.Bootstrapper>
+                <app:Bootstrapper />
+            </s:ApplicationLoader.Bootstrapper>
+            <s:ApplicationLoader.MergedDictionaries>
+                <!-- 语言资源 -->
+                <!-- 这里默认加载的是中文，方便在设计模式下使用 -->
+                <ResourceDictionary>
+                    <XmlDataProvider x:Key="Strings" 
+                                     Source="pack://application:,,,/Strings/en-US.xml"
+                                     XPath="language"
+                                     IsAsynchronous="False" />
+                </ResourceDictionary>
+                <ResourceDictionary Source="pack://application:,,,/Themes/Generic.xaml" />
+            </s:ApplicationLoader.MergedDictionaries>
+        </s:ApplicationLoader>
+    </Application.Resources>
+</Application>

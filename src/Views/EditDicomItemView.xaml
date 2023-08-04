@@ -1,0 +1,104 @@
+﻿<Window x:Class="SimpleDICOMToolkit.Views.EditDicomItemView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:s="https://github.com/canton7/Stylet"
+        mc:Ignorable="d"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        Width="360"
+        Height="360"
+        Title="{Binding DisplayName}" 
+        KeyDown="{s:Action OnKeyDown}"
+        Activated="Window_Activated"
+        Deactivated="Window_Deactivated">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="ButtonBackground" Color="White" />
+        <SolidColorBrush x:Key="ButtonForeground" Color="Black" />
+
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource BlueButtonStyle}">
+            <Setter Property="Background" Value="{DynamicResource ButtonBackground}" />
+            <Setter Property="Foreground" Value="{DynamicResource ButtonForeground}" />
+        </Style>
+    </Window.Resources>
+    
+    <Grid FocusManager.FocusedElement="{Binding ElementName=EditBox}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="2">
+            <TextBlock Text="Tag: " VerticalAlignment="Center" Margin="4,4,0,4" />
+            <TextBox Text="{Binding TagString, UpdateSourceTrigger=PropertyChanged}" 
+                     IsReadOnly="{Binding IsEditItem}" 
+                     VerticalAlignment="Center" VerticalContentAlignment="Center" 
+                     Width="90" Height="21" Margin="0,0,4,0">
+                <TextBox.ToolTip>
+                    <Binding Source="{StaticResource Strings}" XPath="string[@key='TooltipDicomTagDescription']" />
+                </TextBox.ToolTip>
+            </TextBox>
+            <TextBlock Text="VR: " VerticalAlignment="Center" Margin="4,0,0,0" />
+            <ComboBox ItemsSource="{Binding VRList}" SelectedItem="{Binding CurrentVR}" 
+                      VerticalAlignment="Center" HorizontalContentAlignment="Center" Width="65" />
+        </StackPanel>
+        <GroupBox Grid.Row="1" Header="Element Values" Margin="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBox Grid.Row="0" x:Name="EditBox" Text="{Binding CurrentEditValue}" />
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                    <Button x:Name="UpdateButton" Command="{s:Action UpdateCurrentValue}">
+                        <Button.Content>
+                            <Binding Source="{StaticResource Strings}" XPath="string[@key='Update']" />
+                        </Button.Content>
+                        <Button.ToolTip>
+                            <Binding Source="{StaticResource Strings}" XPath="string[@key='TooltipUpdate']" />
+                        </Button.ToolTip>
+                    </Button>
+                    <Button x:Name="InserButton" Command="{s:Action InsertNewValue}">
+                        <Button.Content>
+                            <Binding Source="{StaticResource Strings}" XPath="string[@key='Insert']" />
+                        </Button.Content>
+                        <Button.ToolTip>
+                            <Binding Source="{StaticResource Strings}" XPath="string[@key='TooltipInsertNew']" />
+                        </Button.ToolTip>
+                    </Button>
+                    <Button x:Name="DeleteButton" Command="{s:Action DeleteCurrentValue}">
+                        <Button.Content>
+                            <Binding Source="{StaticResource Strings}" XPath="string[@key='Delete']" />
+                        </Button.Content>
+                        <Button.ToolTip>
+                            <Binding Source="{StaticResource Strings}" XPath="string[@key='TooltipDelete']" />
+                        </Button.ToolTip>
+                    </Button>
+                </StackPanel>
+                <ListView Grid.Row="2" ItemsSource="{Binding ElementValues}"
+                          SelectedIndex="{Binding CurrentValueIndex}" />
+            </Grid>
+        </GroupBox>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="OK" Command="{s:Action OnOK, ActionNotFound=Disable}">
+                <Button.Content>
+                    <Binding Source="{StaticResource Strings}" XPath="string[@key='OK']" />
+                </Button.Content>
+                <Button.ToolTip>
+                    <Binding Source="{StaticResource Strings}" XPath="string[@key='OK']" />
+                </Button.ToolTip>
+            </Button>
+            <Button x:Name="Cancel" Command="{s:Action OnCancel, ActionNotFound=Disable}">
+                <Button.Content>
+                    <Binding Source="{StaticResource Strings}" XPath="string[@key='Cancel']" />
+                </Button.Content>
+                <Button.ToolTip>
+                    <Binding Source="{StaticResource Strings}" XPath="string[@key='Cancel']" />
+                </Button.ToolTip>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

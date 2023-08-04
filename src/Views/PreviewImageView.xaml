@@ -1,0 +1,51 @@
+﻿<Window x:Class="SimpleDICOMToolkit.Views.PreviewImageView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:s="https://github.com/canton7/Stylet"
+        xmlns:v="clr-namespace:SimpleDICOMToolkit.Views"
+        mc:Ignorable="d"
+        Title="{Binding DisplayName}" 
+        ShowInTaskbar="False"
+        Width="640"
+        Height="640" >
+
+    <Window.Resources>
+        <s:BoolToVisibilityConverter x:Key="BoolToVisibilityConv" TrueVisibility="Visible" FalseVisibility="Hidden" />
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="VerticalAlignment" Value="Bottom" />
+        </Style>
+    </Window.Resources>
+    
+    <Grid Background="Black">
+        <Image RenderOptions.BitmapScalingMode="NearestNeighbor" 
+               Source="{Binding ImageSource}" 
+               MouseWheel="{s:Action OnMouseWheel}"
+               MouseLeftButtonDown="{s:Action OnMouseLDown}"
+               MouseLeftButtonUp="{s:Action OnMouseLUp}"
+               MouseRightButtonDown="{s:Action OnMouseRDown}"
+               MouseRightButtonUp="{s:Action OnMouseRUp}"
+               MouseMove="{s:Action OnMouseMove}">
+            <Image.RenderTransform>
+                <TransformGroup>
+                    <TranslateTransform />
+                    <ScaleTransform />
+                    <RotateTransform />
+                </TransformGroup>
+            </Image.RenderTransform>
+        </Image>
+
+        <v:ImageOrientationView DataContext="{Binding ImageOrientationViewModel}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom" 
+                                Margin="6" />
+
+        <TextBlock Text="{Binding WindowCenterText, Mode=OneWay}" Visibility="{Binding IsGrayscale, Converter={StaticResource BoolToVisibilityConv}}" Margin="0,0,6,30" />
+        <TextBlock Text="{Binding WindowWidthText, Mode=OneWay}" Visibility="{Binding IsGrayscale, Converter={StaticResource BoolToVisibilityConv}}" Margin="0,0,6,6" />
+    </Grid>
+</Window>

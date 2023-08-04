@@ -1,0 +1,108 @@
+﻿<UserControl x:Class="SimpleDICOMToolkit.Views.WorklistResultView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:s="https://github.com/canton7/Stylet"
+             xmlns:c="clr-namespace:SimpleDICOMToolkit.Controls"
+             xmlns:vm="clr-namespace:SimpleDICOMToolkit.ViewModels"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=vm:WorklistResultViewModel, IsDesignTimeCreatable=True}"
+             d:DesignWidth="340"
+             d:DesignHeight="420">
+
+    <UserControl.Resources>
+        <ContextMenu x:Key="WorklistItemContextMenu">
+            <MenuItem s:View.ActionTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}, Path=DataContext}"
+                      Command="{s:Action StartPerformance, ActionNotFound=Disable}"
+                      CommandParameter="{Binding}">
+                <MenuItem.Header>
+                    <Binding Source="{StaticResource Strings}" XPath="string[@key='Start']" />
+                </MenuItem.Header>
+                <MenuItem.ToolTip>
+                    <Binding Source="{StaticResource Strings}" XPath="string[@key='Start']" />
+                </MenuItem.ToolTip>
+                <MenuItem.Icon>
+                    <Image Width="16" Height="16" Source="pack://application:,,,/Assets/start.png" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem s:View.ActionTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}, Path=DataContext}"
+                      Command="{s:Action CompletePerformance, ActionNotFound=Disable}"
+                      CommandParameter="{Binding}">
+                <MenuItem.Header>
+                    <Binding Source="{StaticResource Strings}" XPath="string[@key='Complete']" />
+                </MenuItem.Header>
+                <MenuItem.ToolTip>
+                    <Binding Source="{StaticResource Strings}" XPath="string[@key='Complete']" />
+                </MenuItem.ToolTip>
+                <MenuItem.Icon>
+                    <Image Width="16" Height="16" Source="pack://application:,,,/Assets/success.png" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem s:View.ActionTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}, Path=DataContext}"
+                      Command="{s:Action DiscontinuedPerformance, ActionNotFound=Disable}"
+                      CommandParameter="{Binding}">
+                <MenuItem.Header>
+                    <Binding Source="{StaticResource Strings}" XPath="string[@key='Discontinued']" />
+                </MenuItem.Header>
+                <MenuItem.ToolTip>
+                    <Binding Source="{StaticResource Strings}" XPath="string[@key='Discontinued']" />
+                </MenuItem.ToolTip>
+                <MenuItem.Icon>
+                    <Image Width="16" Height="16" Source="pack://application:,,,/Assets/failed1.png" />
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="8*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="9*" />
+                <ColumnDefinition Width="6" />
+            </Grid.ColumnDefinitions>
+            <Grid x:Name="Column1" Grid.Column="0" />
+            <Grid x:Name="Column2" Grid.Column="1" />
+            <Grid x:Name="Column3" Grid.Column="2" />
+            <Grid x:Name="Column4" Grid.Column="3" />
+        </Grid>
+        <ListView BorderThickness="0"
+                  ItemsSource="{Binding WorklistItems}" 
+                  ScrollViewer.VerticalScrollBarVisibility="Hidden">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="ContextMenu" Value="{StaticResource WorklistItemContextMenu}" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView ColumnHeaderContainerStyle="{StaticResource ListColumnHeaderStyle}">
+                    <GridViewColumn DisplayMemberBinding="{Binding Name}" Width="{Binding ElementName=Column1, Path=ActualWidth}">
+                        <GridViewColumn.Header>
+                            <Binding Source="{StaticResource Strings}" XPath="string[@key='HeaderName']" />
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Sex}" Width="{Binding ElementName=Column2, Path=ActualWidth}">
+                        <GridViewColumn.Header>
+                            <Binding Source="{StaticResource Strings}" XPath="string[@key='HeaderSex']" />
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Age}" Width="{Binding ElementName=Column3, Path=ActualWidth}">
+                        <GridViewColumn.Header>
+                            <Binding Source="{StaticResource Strings}" XPath="string[@key='HeaderAge']" />
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding PatientId}" Width="{Binding ElementName=Column4, Path=ActualWidth}">
+                        <GridViewColumn.Header>
+                            <Binding Source="{StaticResource Strings}" XPath="string[@key='HeaderPatientID']" />
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <c:ProgressRing Width="60" Height="60" 
+                        IsActive="{Binding IsBusy}" />
+    </Grid>
+</UserControl>

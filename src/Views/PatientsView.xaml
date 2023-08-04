@@ -1,0 +1,169 @@
+﻿<UserControl x:Class="SimpleDICOMToolkit.Views.PatientsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:s="https://github.com/canton7/Stylet"
+             xmlns:inf="clr-namespace:SimpleDICOMToolkit.Infrastructure"
+             xmlns:m="clr-namespace:SimpleDICOMToolkit.Models"
+             xmlns:vm="clr-namespace:SimpleDICOMToolkit.ViewModels"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance vm:PatientsViewModel, IsDesignTimeCreatable=True}"
+             d:DesignWidth="360"
+             d:DesignHeight="420">
+
+    <UserControl.Resources>
+        <ContextMenu x:Key="WorklistItemContextMenu">
+            <MenuItem s:View.ActionTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}, Path=DataContext}"
+                      Command="{s:Action ViewDetails, ActionNotFound=Disable}"
+                      CommandParameter="{Binding}">
+                <MenuItem.Header>
+                    <Binding Source="{StaticResource Strings}" XPath="string[@key='Details']" />
+                </MenuItem.Header>
+                <MenuItem.ToolTip>
+                    <Binding Source="{StaticResource Strings}" XPath="string[@key='TooltipDetails']" />
+                </MenuItem.ToolTip>
+                <MenuItem.Icon>
+                    <Image Width="16" Height="16" Source="pack://application:,,,/Assets/details.png" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem s:View.ActionTarget="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}, Path=DataContext}"
+                      Command="{s:Action RemoveItem, ActionNotFound=Disable}"
+                      CommandParameter="{Binding}">
+                <MenuItem.Header>
+                    <Binding Source="{StaticResource Strings}" XPath="string[@key='Remove']" />
+                </MenuItem.Header>
+                <MenuItem.ToolTip>
+                    <Binding Source="{StaticResource Strings}" XPath="string[@key='TooltipRemove']" />
+                </MenuItem.ToolTip>
+                <MenuItem.Icon>
+                    <Image Width="16" Height="16" Source="pack://application:,,,/Assets/delete.png" />
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="7*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="8*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="6" />
+            </Grid.ColumnDefinitions>
+            <Grid x:Name="Column1" Grid.Column="0" />
+            <Grid x:Name="Column2" Grid.Column="1" />
+            <Grid x:Name="Column3" Grid.Column="2" />
+            <Grid x:Name="Column4" Grid.Column="3" />
+            <Grid x:Name="Column5" Grid.Column="4" />
+        </Grid>
+        <ListView BorderThickness="0"
+                  ItemsSource="{Binding WorklistItems}"
+                  ScrollViewer.VerticalScrollBarVisibility="Hidden">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <EventSetter Event="MouseDoubleClick" Handler="ItemMouseDoubleClick" />
+                    <Setter Property="ContextMenu" Value="{StaticResource WorklistItemContextMenu}" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView ColumnHeaderContainerStyle="{StaticResource ListColumnHeaderStyle}">
+                    <GridViewColumn DisplayMemberBinding="{Binding PatientName}" Width="{Binding ElementName=Column1, Path=ActualWidth}">
+                        <GridViewColumn.Header>
+                            <Binding Source="{StaticResource Strings}" XPath="string[@key='HeaderName']" />
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Sex}" Width="{Binding ElementName=Column2, Path=ActualWidth}">
+                        <GridViewColumn.Header>
+                            <Binding Source="{StaticResource Strings}" XPath="string[@key='HeaderSex']" />
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Age}" Width="{Binding ElementName=Column3, Path=ActualWidth}">
+                        <GridViewColumn.Header>
+                            <Binding Source="{StaticResource Strings}" XPath="string[@key='HeaderAge']" />
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding PatientID}" Width="{Binding ElementName=Column4, Path=ActualWidth}">
+                        <GridViewColumn.Header>
+                            <Binding Source="{StaticResource Strings}" XPath="string[@key='HeaderPatientID']" />
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn Width="{Binding ElementName=Column5, Path=ActualWidth}">
+                        <GridViewColumn.Header>
+                            <Binding Source="{StaticResource Strings}" XPath="string[@key='HeaderStatus']" />
+                        </GridViewColumn.Header>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate DataType="{x:Type m:WorklistItem}">
+                                <Image x:Name="StatusImage" Width="16" Height="16" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding MppsStatus}">
+                                        <DataTrigger.Value>
+                                            <inf:MppsStatus>Waiting</inf:MppsStatus>
+                                        </DataTrigger.Value>
+                                        <Setter TargetName="StatusImage" Property="Source" Value="pack://application:,,,/Assets/waiting.png" />
+                                        <Setter TargetName="StatusImage" Property="ToolTip">
+                                            <Setter.Value>
+                                                <Binding Source="{StaticResource Strings}" XPath="string[@key='Waiting']" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding MppsStatus}">
+                                        <DataTrigger.Value>
+                                            <inf:MppsStatus>InProgress</inf:MppsStatus>
+                                        </DataTrigger.Value>
+                                        <Setter TargetName="StatusImage" Property="Source" Value="pack://application:,,,/Assets/in-progress.png" />
+                                        <Setter TargetName="StatusImage" Property="ToolTip">
+                                            <Setter.Value>
+                                                <Binding Source="{StaticResource Strings}" XPath="string[@key='InProgress']" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding MppsStatus}">
+                                        <DataTrigger.Value>
+                                            <inf:MppsStatus>Completed</inf:MppsStatus>
+                                        </DataTrigger.Value>
+                                        <Setter TargetName="StatusImage" Property="Source" Value="pack://application:,,,/Assets/success.png" />
+                                        <Setter TargetName="StatusImage" Property="ToolTip">
+                                            <Setter.Value>
+                                                <Binding Source="{StaticResource Strings}" XPath="string[@key='Complete']" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding MppsStatus}">
+                                        <DataTrigger.Value>
+                                            <inf:MppsStatus>Discontinued</inf:MppsStatus>
+                                        </DataTrigger.Value>
+                                        <Setter TargetName="StatusImage" Property="Source" Value="pack://application:,,,/Assets/failed1.png" />
+                                        <Setter TargetName="StatusImage" Property="ToolTip">
+                                            <Setter.Value>
+                                                <Binding Source="{StaticResource Strings}" XPath="string[@key='Discontinued']" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <StackPanel Grid.Row="1" Orientation="Horizontal"
+                    HorizontalAlignment="Center">
+            <Button s:View.ActionTarget="{Binding}"
+                    Style="{StaticResource TransparentButtonStyle}"
+                    Command="{s:Action ShowRegistrationWindow, ActionNotFound=Disable}">
+                <Button.ToolTip>
+                    <Binding  Source="{StaticResource Strings}" XPath="string[@key='TooltipRegist']" />
+                </Button.ToolTip>
+                <Image Width="24" Height="24" Stretch="Fill"
+                       Source="pack://application:,,,/Assets/register.png" />
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

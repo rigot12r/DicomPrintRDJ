@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="SimpleDICOMToolkit.Views.PrintJobsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:s="https://github.com/canton7/Stylet"
+             xmlns:v="clr-namespace:SimpleDICOMToolkit.Views"
+             mc:Ignorable="d" 
+             d:DesignWidth="600"
+             d:DesignHeight="480"
+             s:View.ActionTarget="{Binding}"
+             MouseDoubleClick="{s:Action Explore}">
+
+    <Grid>
+        <Image 
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Stretch="None"
+            Source="pack://application:,,,/Assets/open_folder.png">
+            <Image.ToolTip>
+                <Binding Source="{StaticResource Strings}" XPath="string[@key='TooltipOpenPrinterFolder']" />
+            </Image.ToolTip>
+        </Image>
+    </Grid>
+</UserControl>
