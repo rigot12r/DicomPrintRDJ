@@ -16,7 +16,7 @@ namespace SimpleDICOMToolkit.Services
 
         // get latest release
         // GET /repos/{owner}/{repo}/releases/latest
-        private const string Request_url = @"/repos/kira-96/dicom-toolkit/releases/latest";
+        private const string Request_url = @"/rigot12r/DicomPrintRDJ/releases/latest";
 
         private const string Download_Dir = "Update";
         private const string Downloading_Suffix = ".downloading";
