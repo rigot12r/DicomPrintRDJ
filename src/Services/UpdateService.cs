@@ -16,8 +16,8 @@ namespace SimpleDICOMToolkit.Services
 
         // get latest release
         // GET /repos/{owner}/{repo}/releases/latest
-        private const string Request_url = @"/rigot12r/DicomPrintRDJ/releases/latest";
-
+        //private const string Request_url = @"/rigot12r/DicomPrintRDJ/releases/latest";
+        private const string Request_url = @"/repos/rigot12r/DicomPrintRDJ/releases/latest";
         private const string Download_Dir = "Update";
         private const string Downloading_Suffix = ".downloading";
         private const int Download_trunk_size = 1024;
