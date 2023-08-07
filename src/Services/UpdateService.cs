@@ -13,6 +13,7 @@ namespace SimpleDICOMToolkit.Services
     public class UpdateService : IUpdateService
     {
         private const string GITHUB_API = @"https://api.github.com";
+        string tokenAcceso = "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";
 
         // get latest release
         // GET /repos/{owner}/{repo}/releases/latest
@@ -74,6 +75,7 @@ namespace SimpleDICOMToolkit.Services
                     req.Method = "GET";
                     req.Accept = "application/vnd.github.v3+json";
                     req.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36";
+                    req.Headers.Add("Authorization", "Token " + tokenAcceso);
 
                     IsCheckingForUpdate = true;
 
