@@ -38,7 +38,6 @@
         private readonly Dictionary<string, string> supportLanguages = new Dictionary<string, string>()
         {
             { "zh-CN", "简体中文" },
-            { "en-US", "English" },
             /* 添加语言 */
         };
 
